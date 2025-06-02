@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
@@ -13,14 +13,14 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::all();
-        return view('admin.news.index', compact('news'));
+        return view('staff.news.index', compact('news'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $countries = Country::all();
-        return view('admin.news.create', compact('categories', 'countries'));
+        return view('staff.news.create', compact('categories', 'countries'));
     }
 
     public function store(Request $request)
@@ -56,7 +56,7 @@ class NewsController extends Controller
             'image' => $imageName
         ]);
 
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->route('staff.news.index')->with('success', 'Berita berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -69,7 +69,7 @@ class NewsController extends Controller
         $countries = Country::all();
 
         // Kirim data ke view
-        return view('admin.news.edit', compact('news', 'categories', 'countries'));
+        return view('staff.news.edit', compact('news', 'categories', 'countries'));
     }
 
     public function update(Request $request, $id)
@@ -114,8 +114,8 @@ class NewsController extends Controller
         // Simpan perubahan
         $news->save();
 
-        // Redirect ke halaman admin news index
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui.');
+        // Redirect ke halaman staff news index
+        return redirect()->route('staff.news.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -126,6 +126,6 @@ class NewsController extends Controller
         }
         $news->delete();
 
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');
+        return redirect()->route('staff.news.index')->with('success', 'Berita berhasil dihapus.');
     }
 }

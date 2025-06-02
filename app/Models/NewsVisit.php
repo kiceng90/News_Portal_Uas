@@ -16,8 +16,7 @@ class NewsVisit extends Model
         'referer',
         'browser',
         'platform',
-        'visited_at',
-        'duration_seconds'
+        'visited_at'
     ];
 
     public function news()

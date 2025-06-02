@@ -15,9 +15,9 @@ class News extends Model
         'content', 
         'author', 
         'slug', 
-        'image', 
         'category_id', 
-        'country_id'
+        'country_id', 
+        'image'
     ];
 
     public function category()

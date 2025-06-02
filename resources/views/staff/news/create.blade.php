@@ -1,10 +1,10 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 @section('title', 'Tambah Berita')
 
 @section('content')
 <h1 class="text-2xl font-semibold mb-4">Tambah Berita Baru</h1>
 
-<form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+<form action="{{ route('staff.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
     @csrf
 
     <div>

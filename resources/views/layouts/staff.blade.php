@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Admin Panel</title>
+    <title>@yield('title') - Staff Panel</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Google Font -->
@@ -107,13 +107,13 @@
 
         <nav>
             <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.news.index') }}">Berita</a></li>
-                <li><a href="{{ route('admin.categories.index') }}">Kategori</a></li>
-                <li><a href="{{ route('admin.countries.index') }}">Negara</a></li>
-                <li><a href="{{ route('admin.comments.index') }}">Komentar</a></li>
-                <li><a href="{{ route('admin.visits.index') }}">Kunjungan</a></li>
-                <li><a href="{{ route('admin.shares.index') }}">Bagikan</a></li>
+                <li><a href="{{ route('staff.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ route('staff.news.index') }}">Berita</a></li>
+                <li><a href="{{ route('staff.categories.index') }}">Kategori</a></li>
+                <li><a href="{{ route('staff.countries.index') }}">Negara</a></li>
+                <li><a href="{{ route('staff.comments.index') }}">Komentar</a></li>
+                <li><a href="{{ route('staff.visits.index') }}">Kunjungan</a></li>
+                <li><a href="{{ route('staff.shares.index') }}">Bagikan</a></li>
             </ul>
         </nav>
 

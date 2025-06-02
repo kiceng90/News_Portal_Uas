@@ -1,10 +1,10 @@
-@extends('layouts.admin')
+@extends('layouts.staff')
 @section('title', 'Edit Berita')
 
 @section('content')
 <h1 class="text-2xl font-semibold mb-4">Edit Berita</h1>
 
-<form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('staff.news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Staff;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/news/{id}/comment', [NewsController::class, 'storeComment'])->name('news.comment.store');
 });
 
 // Admin Routes
@@ -62,13 +64,25 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('shares', Admin\ShareController::class)->only(['index']);
 });
 
-// Staff Routes (Opsional)
+// Staff Routes 
 Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->group(function () {
     // Route::get('/dashboard', function () {
     //     return view('staff.dashboard');
     // })->name('dashboard');
 
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('staff.dashboard'))->name('dashboard');
+
+    Route::resource('news', Staff\NewsController::class);
+    Route::resource('categories', Staff\CategoryController::class);
+    Route::resource('countries', Staff\CountryController::class);
+    Route::resource('comments', Staff\CommentController::class)->only(['index', 'destroy']);
+    Route::resource('visits', Staff\VisitController::class)->only(['index']);
+    Route::resource('shares', Staff\ShareController::class)->only(['index']);
+});
+
+// Client Routes
+Route::middleware(['auth', 'role:client'])->prefix('client')->group(function () {
+    Route::get('/dashboard', fn() => view('client.dashboard'))->name('client.dashboard');
 });
 
 require __DIR__.'/auth.php';

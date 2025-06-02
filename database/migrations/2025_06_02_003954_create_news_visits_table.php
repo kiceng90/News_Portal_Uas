@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('news_visits', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('news_id');
-            $table->string('ip', 39); // IPv6 support
+            $table->string('ip', 39); // Support IPv6
             $table->string('user_agent')->nullable();
             $table->string('referer')->nullable();
             $table->string('browser')->nullable();
             $table->string('platform')->nullable();
             $table->timestamp('visited_at');
-            $table->integer('duration_seconds')->nullable();
-            $table->timestamps();
 
             $table->foreign('news_id')->references('id')->on('news')->onDelete('cascade');
         });
