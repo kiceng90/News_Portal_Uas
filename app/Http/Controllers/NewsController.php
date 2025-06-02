@@ -44,25 +44,7 @@ class NewsController extends Controller
         return view('news.show', compact('news', 'comments'));
     }
 
-    // public function show($id)
-    // {
-    //     $news = News::with(['category', 'country'])->findOrFail($id);
-
-    //     // Simpan kunjungan
-    //     NewsVisit::create([
-    //         'news_id' => $id,
-    //         'ip' => Request::ip(),
-    //         'user_agent' => Request::header('User-Agent'),
-    //         'referer' => Request::header('Referer'),
-    //         'browser' => $this->getBrowser(Request::header('User-Agent')),
-    //         'platform' => php_uname('s'), // atau gunakan request()->server('HTTP_USER_AGENT') untuk lebih akurat
-    //         'visited_at' => now()
-    //     ]);
-
-    //     $comments = NewsComment::whereNull('parent_id')->where('news_id', $id)->with(['replies.user', 'user'])->get();
-
-    //     return view('news.show', compact('news', 'comments'));
-    // }
+    
 
     // Simpan komentar
     public function storeComment(Request $request, $newsId)
