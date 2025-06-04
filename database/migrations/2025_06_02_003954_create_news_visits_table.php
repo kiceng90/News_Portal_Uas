@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('referer')->nullable();
             $table->string('browser')->nullable();
             $table->string('platform')->nullable();
-            $table->timestamp('visited_at');
+            $table->timestamps();
 
             $table->foreign('news_id')->references('id')->on('news')->onDelete('cascade');
         });

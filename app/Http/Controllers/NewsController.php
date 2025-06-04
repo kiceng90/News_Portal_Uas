@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\News;
 use App\Models\Category;
 use App\Models\NewsComment;
+use App\Models\NewsShare;
 use App\Models\NewsVisit;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as RequestFacade;
 
 class NewsController extends Controller
 {
@@ -16,8 +19,9 @@ class NewsController extends Controller
         // Ambil semua kategori
         $categories = Category::all();
 
-        // Filter berita berdasarkan kategori (jika ada query parameter category)
+        // Filter berita berdasarkan kategori
         $categoryId = $request->query('category');
+
         $newsQuery = News::with(['category', 'country']);
 
         if ($categoryId) {
@@ -26,16 +30,26 @@ class NewsController extends Controller
 
         $newsList = $newsQuery->get();
 
-        // Kirim data ke view
         return view('news.index', compact('newsList', 'categories'));
     }
 
     // Menampilkan detail berita
     public function show(Request $request, $id)
     {
+        // Ambil berita beserta relasi
         $news = News::with(['category', 'country'])->findOrFail($id);
 
-        // Ambil semua komentar utama + reply
+        // Simpan kunjungan
+        NewsVisit::create([
+            'news_id' => $id,
+            'ip' => RequestFacade::ip(),
+            'user_agent' => RequestFacade::header('User-Agent'),
+            'browser' => $this->getBrowser(RequestFacade::header('User-Agent')),
+            'platform' => php_uname('s'),
+            'visited_at' => now()
+        ]);
+
+        // Ambil komentar utama + balasan
         $comments = NewsComment::where('news_id', $id)
                                 ->whereNull('parent_id')
                                 ->with(['user', 'replies.user'])
@@ -44,9 +58,25 @@ class NewsController extends Controller
         return view('news.show', compact('news', 'comments'));
     }
 
-    
+    // Fungsi untuk menentukan browser dari user agent
+    private function getBrowser($userAgent)
+    {
+        if (str_contains($userAgent, 'Firefox')) {
+            return 'Firefox';
+        } elseif (str_contains($userAgent, 'Edg')) {
+            return 'Edge';
+        } elseif (str_contains($userAgent, 'Chrome')) {
+            return 'Chrome';
+        } elseif (str_contains($userAgent, 'Safari')) {
+            return 'Safari';
+        } elseif (str_contains($userAgent, 'MSIE') || str_contains($userAgent, 'Trident')) {
+            return 'Internet Explorer';
+        } else {
+            return 'Unknown';
+        }
+    }
 
-    // Simpan komentar
+    // Menyimpan komentar
     public function storeComment(Request $request, $newsId)
     {
         $request->validate([
@@ -56,20 +86,24 @@ class NewsController extends Controller
 
         NewsComment::create([
             'news_id' => $newsId,
-            'user_id' => auth()->id(),
-            'comment' => $request->comment,
-            'parent_id' => $request->input('parent_id') ?: null
+            'user_id' => Auth::id(),
+            'parent_id' => $request->input('parent_id'),
+            'comment' => $request->comment
         ]);
 
-        return back()->with('success', 'Komentar berhasil dikirim.');
+        return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 
-    private function getBrowser($userAgent)
+    public function storeShare(Request $request, $newsId)
     {
-        if (str_contains($userAgent, 'Firefox')) return 'Firefox';
-        elseif (str_contains($userAgent, 'Chrome')) return 'Chrome';
-        elseif (str_contains($userAgent, 'Safari')) return 'Safari';
-        elseif (str_contains($userAgent, 'MSIE')) return 'Internet Explorer';
-        else return 'Unknown';
+        NewsShare::create([
+            'news_id' => $newsId,
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'platform' => $request->query('platform') ?: 'unknown',
+            'browser' => RequestFacade::header('User-Agent'),
+            'ip' => RequestFacade::ip(),
+        ]);
+
+        return back()->with('success', 'Berita berhasil dibagikan.');
     }
 }

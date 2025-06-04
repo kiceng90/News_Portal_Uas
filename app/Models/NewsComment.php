@@ -28,6 +28,6 @@ class NewsComment extends Model
 
     public function replies()
     {
-        return $this->hasMany(NewsComment::class, 'parent_id');
+        return $this->hasMany(NewsComment::class, 'parent_id')->with('user');
     }
 }

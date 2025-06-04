@@ -11,14 +11,19 @@ class NewsShare extends Model
 
     protected $fillable = [
         'news_id',
+        'user_id',
         'platform',
-        'user_agent',
         'browser',
-        'referer'
+        'ip'
     ];
 
     public function news()
     {
-        return $this->belongsTo(News::class);
+        return $this->belongsTo(\App\Models\News::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

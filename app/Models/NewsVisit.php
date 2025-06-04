@@ -15,8 +15,7 @@ class NewsVisit extends Model
         'user_agent',
         'referer',
         'browser',
-        'platform',
-        'visited_at'
+        'platform'
     ];
 
     public function news()

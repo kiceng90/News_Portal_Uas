@@ -114,6 +114,8 @@
     @endif
 
     @yield('content')
+
+    @stack('scripts') <!-- Penting! -->
 </main>
 
 <!-- Footer -->

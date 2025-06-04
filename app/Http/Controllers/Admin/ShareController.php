@@ -10,7 +10,13 @@ class ShareController extends Controller
 {
     public function index()
     {
-        $shares = NewsShare::with('news')->get();
+        $shares = NewsShare::with(['news', 'user'])->latest()->paginate(10);
         return view('admin.shares.index', compact('shares'));
+    }
+
+    public function destroy(NewsShare $share)
+    {
+        $share->delete();
+        return back()->with('success', 'Data share berhasil dihapus.');
     }
 }

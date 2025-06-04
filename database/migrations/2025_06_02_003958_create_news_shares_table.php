@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('news_shares', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('news_id');
-            $table->string('platform'); // misalnya: facebook, twitter, whatsapp
-            $table->string('user_agent')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable(); // Jika login
+            $table->string('platform'); // facebook, whatsapp, twitter, email, dll
             $table->string('browser')->nullable();
-            $table->string('referer')->nullable();
+            $table->string('ip', 39)->nullable(); // IPv6 support
             $table->timestamps();
 
             $table->foreign('news_id')->references('id')->on('news')->onDelete('cascade');
-        });
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');        });
     }
 
     /**
